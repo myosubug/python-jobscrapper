@@ -1,4 +1,5 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 
 LIMIT = 50
@@ -17,7 +18,7 @@ def extract_last_page():
 
 
 def extract_jobs(lastPage):
-    jobs = []
+    jobs = {}
     for page in range(lastPage):
         result = requests.get(URL+"&start={0*LIMIT}")
         soup = BeautifulSoup(result.text, 'html.parser')
@@ -31,5 +32,6 @@ def extract_jobs(lastPage):
             else:
                 company = str(company.string)
             company = company.strip()
-            print(company)
-    return jobs
+            jobs[title] = company
+
+    return eval(json.dumps(jobs))
