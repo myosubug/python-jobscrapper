@@ -43,3 +43,9 @@ def extract_jobs(lastPage):
                 "link": "https://www.indeed.ca/viewjob?jk="+job_id
             })
     return eval(json.dumps(jobs))
+
+
+def get_indeed_jobs():
+    lastPage = extract_last_page()
+    temp = extract_jobs(lastPage)
+    return temp

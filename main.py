@@ -1,5 +1,10 @@
-from extract import extract_last_page, extract_jobs
+from indeed import get_indeed_jobs
+import csv
 
-lastPage = extract_last_page()
-temp = extract_jobs(lastPage)
-print(temp)
+indeed_jobs = get_indeed_jobs()
+file = open("jobsearch.csv", mode='w')
+writer = csv.writer(file)
+writer.writerow(["company", "link", "location", "title"])
+for job in indeed_jobs:
+    writer.writerow(job.values())
+file.close()
