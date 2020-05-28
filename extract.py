@@ -18,9 +18,10 @@ def extract_last_page():
 
 
 def extract_jobs(lastPage):
-    jobs = {}
+    jobs = []
     for page in range(lastPage):
-        result = requests.get(URL+"&start={0*LIMIT}")
+        print("Scrapping page {}".format(page))
+        result = requests.get(URL+"&start={page*LIMIT}")
         soup = BeautifulSoup(result.text, 'html.parser')
         results = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
         for result in results:
@@ -32,6 +33,13 @@ def extract_jobs(lastPage):
             else:
                 company = str(company.string)
             company = company.strip()
-            jobs[title] = company
-
+            location = result.find("div", {"class": "recJobLoc"})[
+                "data-rc-loc"]
+            job_id = result["data-jk"]
+            jobs.append({
+                "title": title,
+                "company": company,
+                "location": location,
+                "link": "https://www.indeed.ca/viewjob?jk="+job_id
+            })
     return eval(json.dumps(jobs))
